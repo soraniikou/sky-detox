@@ -2,7 +2,7 @@
 # 空 (Sora) - Sky Minimalist App
 
 「ただ流し、ただ消し、ただ見つめるだけ。」
-全て流し忘れたいなら消してください。
+気が済むまで押してください。波紋が出るだけです。
 ボタンを押すだけ。意味がいらないアプリです。
 
 
@@ -16,8 +16,7 @@
 
 ## ✨ 特徴
 
-- **流す (Flow):** 空の色を次の色へと滑らかに変化させます。
-- **消す (Erase):** ランダムな空の色へ瞬時にリセットします。
+- 
 - **波紋 (Ripple):** 画面に触れた場所に広がる静かなエフェクト。
 
 ---
@@ -37,4 +36,25 @@
 
 ---
 
-Developed with logic and peace.
+Deploy
+Streamlit Cloud
+GitHubにプッシュ
+Streamlit Cloud にログイン
+"New app" をクリック
+リポジトリを選択
+デプロイ完了！
+その他のオプション
+Heroku
+Railway
+Render
+
+Technology Stack
+Frontend: Streamlit
+Language: Python
+Styling: Custom CSS with animations
+📄 License
+MIT License - 自由に使用・改変できます
+
+Acknowledgments
+このアプリは、デジタルデトックスと瞑想の概念にインスパイアされています。
+Made with 💙 for mindful moments
