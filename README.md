@@ -1,6 +1,8 @@
 
 # 空 (Sora) - Sky Minimalist App
 
+https://sky-detox.streamlit.app
+
 「ただ流し、ただ消し、ただ見つめるだけ。」
 気が済むまで押してください。波紋が出るだけです。
 ボタンを押すだけ。意味がいらないアプリです。
