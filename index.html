@@ -1,143 +1,167 @@
-<!DOCTYPE html>
-<html lang="ja">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>空</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        body {
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-            transition: background 2s ease;
-        }
+import streamlit as st
+import random
 
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            animation: ripple-animation 2s ease-out;
-            pointer-events: none;
-        }
+st.set_page_config(page_title="空へ", layout="centered")
 
-        @keyframes ripple-animation {
-            from {
-                width: 0;
-                height: 0;
-                opacity: 1;
-            }
+# ---- 8種類の色パターン ----
+color_patterns = [
+    {
+        "name": "紺色",
+        "gradient": "linear-gradient(180deg, #a2b6df, #1e3a8a)",
+        "text_color": "#ffffff"
+    },
+    {
+        "name": "薄い水色",
+        "gradient": "linear-gradient(180deg, #e0f2fe, #7dd3fc)",
+        "text_color": "#1e3a8a"
+    },
+    {
+        "name": "エメラルド",
+        "gradient": "linear-gradient(180deg, #a7f3d0, #059669)",
+        "text_color": "#ffffff"
+    },
+    {
+        "name": "夕焼け",
+        "gradient": "linear-gradient(180deg, #fecaca, #dc2626)",
+        "text_color": "#ffffff"
+    },
+    {
+        "name": "紫",
+        "gradient": "linear-gradient(180deg, #ddd6fe, #7c3aed)",
+        "text_color": "#ffffff"
+    },
+    {
+        "name": "ピンク",
+        "gradient": "linear-gradient(180deg, #fbcfe8, #ec4899)",
+        "text_color": "#ffffff"
+    },
+    {
+        "name": "オレンジ",
+        "gradient": "linear-gradient(180deg, #fed7aa, #ea580c)",
+        "text_color": "#ffffff"
+    },
+    {
+        "name": "深海",
+        "gradient": "linear-gradient(180deg, #67e8f9, #0c4a6e)",
+        "text_color": "#ffffff"
+    }
+]
 
-            to {
-                width: 800px;
-                height: 800px;
-                opacity: 0;
-            }
-        }
+# ランダムに色を選択（セッション開始時に1回だけ）
+if "color_pattern" not in st.session_state:
+    st.session_state.color_pattern = random.choice(color_patterns)
 
-        .buttons {
-            position: fixed;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 30px;
-            z-index: 10;
-        }
+selected_color = st.session_state.color_pattern
 
-        button {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: rgba(255, 255, 255, 0.9);
-            padding: 16px 40px;
-            font-size: 18px;
-            border-radius: 50px;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-        }
+# ---- CSS ----
+st.markdown(f"""
+<style>
+/* 全体背景 */
+.stApp {{
+    background: linear-gradient(180deg, #f2f2f2, #e8e6e1);
+    transition: background 10s ease;
+}}
 
-        button:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.05);
-        }
+/* 吸い込まれる背景 */
+.stApp.absorb {{
+    background: {selected_color['gradient']} !important;
+}}
 
-        button:active {
-            transform: scale(0.95);
-        }
-    </style>
-</head>
+/* 消えるテキスト */
+.fade-text {{
+    font-size: 2rem;
+    text-align: center;
+    color: rgba(50,50,50,1);
+    animation: fadeOut 10s forwards;
+}}
 
-<body>
-    <div class="buttons">
-        <button id="flow">流す</button>
-        <button id="erase">消す</button>
-    </div>
+.fade-text.triggered {{
+    color: {selected_color['text_color']};
+}}
 
+@keyframes fadeOut {{
+    0% {{ opacity: 1; }}
+    70% {{ opacity: 0.8; }}
+    100% {{ opacity: 0; }}
+}}
+
+/* 波紋エフェクト */
+.ripple {{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: radial-gradient(circle, {selected_color['text_color']}33, transparent);
+    animation: rippleEffect 10s ease-out forwards;
+    pointer-events: none;
+}}
+
+@keyframes rippleEffect {{
+    0% {{
+        width: 50px;
+        height: 50px;
+        opacity: 1;
+    }}
+    50% {{
+        width: 800px;
+        height: 800px;
+        opacity: 0.5;
+    }}
+    100% {{
+        width: 1600px;
+        height: 1600px;
+        opacity: 0;
+    }}
+}}
+
+/* ボタンスタイル */
+div.stButton > button {{
+    background: transparent;
+    border: 2px solid #888;
+    color: #555;
+    font-size: 1.5rem;
+    padding: 1rem 3rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}}
+
+div.stButton > button:hover {{
+    border-color: #333;
+    color: #333;
+    transform: scale(1.05);
+}}
+</style>
+""", unsafe_allow_html=True)
+
+# ---- UI ----
+st.markdown("<div style='height:20vh'></div>", unsafe_allow_html=True)
+
+if "triggered" not in st.session_state:
+    st.session_state.triggered = False
+
+if not st.session_state.triggered:
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col2:
+        if st.button("……"):
+            st.session_state.triggered = True
+            st.rerun()
+
+else:
+    # ここに Dify から返ってきた言葉を入れる
+    word_from_sky = "空の色へ"
+
+    st.markdown(f"""
+    <div class="ripple"></div>
+    <div class="fade-text triggered">{word_from_sky}</div>
     <script>
-        const skyColors = [
-            ['#87CEEB', '#E0F6FF'],
-            ['#4A90E2', '#87CEEB'],
-            ['#5B9BD5', '#B4D7F5'],
-            ['#6BB6FF', '#C2E0FF'],
-            ['#7EC8E3', '#D4EAF7'],
-            ['#4682B4', '#B0D4E3'],
-            ['#5F9EA0', '#AFEEEE'],
-            ['#6495ED', '#B0C4DE'],
-            ['#4169E1', '#87CEFA'],
-            ['#00BFFF', '#ADD8E6']
-        ];
-
-        let currentIndex = Math.floor(Math.random() * skyColors.length);
-
-        function setSky(index) {
-            const [color1, color2] = skyColors[index];
-            document.body.style.background = `linear-gradient(to bottom, ${color1}, ${color2})`;
-        }
-
-        function changeSky() {
-            currentIndex = (currentIndex + 1) % skyColors.length;
-            setSky(currentIndex);
-        }
-
-        function createRipple(e) {
-            const ripple = document.createElement('div');
-            ripple.className = 'ripple';
-
-            const x = e.clientX || window.innerWidth / 2;
-            const y = e.clientY || window.innerHeight / 2;
-
-            ripple.style.left = (x - 400) + 'px';
-            ripple.style.top = (y - 400) + 'px';
-
-            document.body.appendChild(ripple);
-
-            setTimeout(() => ripple.remove(), 2000);
-        }
-
-        document.getElementById('flow').addEventListener('click', (e) => {
-            createRipple(e);
-            setTimeout(changeSky, 300);
-        });
-
-        document.getElementById('erase').addEventListener('click', (e) => {
-            createRipple(e);
-            setTimeout(() => {
-                currentIndex = Math.floor(Math.random() * skyColors.length);
-                setSky(currentIndex);
-            }, 300);
-        });
-
-        setSky(currentIndex);
+    setTimeout(function() {{
+        const app = window.parent.document.querySelector('.stApp');
+        if (app) app.classList.add('absorb');
+    }}, 100);
     </script>
-</body>
-
-</html>
+    """, unsafe_allow_html=True)
